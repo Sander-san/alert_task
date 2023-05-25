@@ -17,7 +17,7 @@ bundle_ids = df['bundle_id'].unique()
 df = df.sort_values(by='date')
 
 
-def check_fatal_error(dataframe, time=1, logger_id=None):
+def check_fatal_error(dataframe, time=1, logger_id=None, error_amount=10):
     """CATCH ERRORS FUNC"""
 
     """SET UP LOGGERS"""
@@ -65,12 +65,12 @@ def check_fatal_error(dataframe, time=1, logger_id=None):
         interval = start_date + timedelta(minutes=time)
         if datetime.fromtimestamp(dataframe['date'].values[index]) > interval:
             start_date = datetime.fromtimestamp(dataframe['date'].values[index])
-            if error_counter > 10:
+            if error_counter > error_amount:
                 alert_logger.warning("[WARNING]: \nMore than 10 fatal errors")
             error_counter = 0
 
         '''Alert about more than 10 fatal errors'''
-        if error_counter > 10:
+        if error_counter > error_amount:
             alert_logger.warning("[WARNING]: \nMore than 10 fatal errors")
             error_counter = 0
 
